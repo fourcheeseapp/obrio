@@ -16,7 +16,7 @@ final class AppRouter: BaseRouter {
     }
  
     func start() {
-        let module = SplashScreenModule()
+        let module = SplashViewModule()
         window.rootViewController = module.viewController()
         window.makeKeyAndVisible()
     }

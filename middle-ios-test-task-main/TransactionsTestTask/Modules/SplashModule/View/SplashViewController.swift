@@ -8,11 +8,11 @@
 import UIKit
 import SnapKit
 
-protocol SplashScreenView: AnyObject {
+protocol SplashView: AnyObject {
     func setupTitle(_ title: String)
 }
 
-final class SplashScreenViewController: BaseViewController {
+final class SplashViewController: BaseViewController {
     private let logoImageView: UIImageView = {
         let view = UIImageView(image: Assets.splashLogo)
         view.backgroundColor = .clear
@@ -26,7 +26,7 @@ final class SplashScreenViewController: BaseViewController {
         view.textAlignment = .center
         return view
     }()
-    var presenter: SplashScreenPresenterProtocol?
+    var presenter: SplashViewPresenterProtocol?
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -42,15 +42,15 @@ final class SplashScreenViewController: BaseViewController {
     }
 }
 
-// MARK: - SplashScreenView
-extension SplashScreenViewController: SplashScreenView {
+// MARK: - SplashView
+extension SplashViewController: SplashView {
     func setupTitle(_ title: String) {
         titleLabel.text = title 
     }
 }
 
 // MARK: - Privates
-private extension SplashScreenViewController {
+private extension SplashViewController {
     func setupUI() {
         view.addSubview(logoImageView)
         view.addSubview(titleLabel)
@@ -68,17 +68,26 @@ private extension SplashScreenViewController {
     }
     
     func animateLogo() {
-        self.logoImageView.snp.updateConstraints {
+        logoImageView.snp.updateConstraints {
             $0.size.equalTo(124)
         }
         
-        UIView.animate(withDuration: Consants.animationDuration, animations: {
+        UIView.animate(withDuration: 2, animations: {
             self.view.layoutIfNeeded()
         })
-    }
-    
-    // MARK: - Constants 
-    enum Consants {
-        static let animationDuration: TimeInterval = 3
+        
+        onMainQueue(after: .now() + 2) { [weak self] in
+            guard let self else { return }
+            self.logoImageView.snp.remakeConstraints {
+                $0.size.equalTo(54)
+                $0.leading.equalToSuperview().offset(16)
+                $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(16)
+            }
+            
+            UIView.animate(withDuration: 2, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+        
     }
 }

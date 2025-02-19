@@ -9,4 +9,6 @@ import UIKit
 
 enum Assets {
     static let splashLogo = UIImage(named: "splash_logo")
+    static let addButton = UIImage(systemName: "plus.circle.fill")
+    static let transferButton = UIImage(named: "transfer_button")
 }

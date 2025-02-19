@@ -1,5 +1,5 @@
 //
-//  SplashViewModule.swift
+//  HomeModule.swift
 //  TransactionsTestTask
 //
 //  Created by Viktor Golovach on 19.02.2025.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-final class SplashViewModule {
-    private let view: SplashViewController
+final class HomeModule {
+    private let view: HomeViewController
     
     init() {
-        view = SplashViewController()
-        let router = SplashViewRouter(viewController: view)
-        let presenter = SplashViewPresenter(
+        view = HomeViewController()
+        let router = HomeViewRouter(viewController: view)
+        let presenter = HomeViewPresenter(
             view: view,
             router: router
         )
@@ -21,7 +21,7 @@ final class SplashViewModule {
     }
 }
 
-extension SplashViewModule: BaseModule {
+extension HomeModule: BaseModule {
     func viewController() -> UIViewController {
         return view
     }
