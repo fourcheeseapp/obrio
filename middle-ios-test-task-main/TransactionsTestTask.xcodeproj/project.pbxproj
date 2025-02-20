@@ -40,6 +40,9 @@
 		36A0AE632D6715B400ED7A15 /* TransactionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0AE622D6715B400ED7A15 /* TransactionTableViewCell.swift */; };
 		36A0AE682D671BBF00ED7A15 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0AE672D671BBF00ED7A15 /* HomeViewModel.swift */; };
 		36A0AE6A2D671F3100ED7A15 /* HomeViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0AE692D671F3100ED7A15 /* HomeViewDataSource.swift */; };
+		36D7DA662D67A5D1007E4242 /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D7DA652D67A5D1007E4242 /* SliderView.swift */; };
+		36D7DA6B2D67C2FF007E4242 /* CoreDataServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D7DA6A2D67C2FF007E4242 /* CoreDataServiceImpl.swift */; };
+		36D7DA6F2D67D0B4007E4242 /* BitcoinRateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D7DA6E2D67D0B4007E4242 /* BitcoinRateResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +99,9 @@
 		36A0AE622D6715B400ED7A15 /* TransactionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTableViewCell.swift; sourceTree = "<group>"; };
 		36A0AE672D671BBF00ED7A15 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		36A0AE692D671F3100ED7A15 /* HomeViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewDataSource.swift; sourceTree = "<group>"; };
+		36D7DA652D67A5D1007E4242 /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		36D7DA6A2D67C2FF007E4242 /* CoreDataServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataServiceImpl.swift; sourceTree = "<group>"; };
+		36D7DA6E2D67D0B4007E4242 /* BitcoinRateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitcoinRateResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,9 +133,10 @@
 		0DF1D13E2D22DC2D001626E7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				0DF1D1412D22DCC3001626E7 /* Helpers */,
 				0DF1D13F2D22DC4B001626E7 /* ServicesAssembler.swift */,
-				0DF1D1442D22DCFF001626E7 /* BitcoinRateService.swift */,
+				36D7DA6C2D67D060007E4242 /* BitcoinRateService */,
+				36D7DA692D67C2E6007E4242 /* CoreDataService */,
+				0DF1D1412D22DCC3001626E7 /* Helpers */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -314,6 +321,7 @@
 			isa = PBXGroup;
 			children = (
 				36A0AE602D667DB100ED7A15 /* HomeHeaderView.swift */,
+				36D7DA652D67A5D1007E4242 /* SliderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -332,6 +340,23 @@
 				36A0AE672D671BBF00ED7A15 /* HomeViewModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		36D7DA692D67C2E6007E4242 /* CoreDataService */ = {
+			isa = PBXGroup;
+			children = (
+				36D7DA6A2D67C2FF007E4242 /* CoreDataServiceImpl.swift */,
+			);
+			path = CoreDataService;
+			sourceTree = "<group>";
+		};
+		36D7DA6C2D67D060007E4242 /* BitcoinRateService */ = {
+			isa = PBXGroup;
+			children = (
+				0DF1D1442D22DCFF001626E7 /* BitcoinRateService.swift */,
+				36D7DA6E2D67D0B4007E4242 /* BitcoinRateResponse.swift */,
+			);
+			path = BitcoinRateService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -476,6 +501,7 @@
 				36A0AE4A2D66654200ED7A15 /* Assets.swift in Sources */,
 				0DF1D1432D22DCD8001626E7 /* PerformOnce.swift in Sources */,
 				36A0AE452D66629C00ED7A15 /* UIWIndow+Ext.swift in Sources */,
+				36D7DA662D67A5D1007E4242 /* SliderView.swift in Sources */,
 				36A0AE472D6662D100ED7A15 /* UIVIew+Ext.swift in Sources */,
 				36A0AE542D6678A200ED7A15 /* HomeViewController.swift in Sources */,
 				36A0AE3C2D66613C00ED7A15 /* SplashViewPresenter.swift in Sources */,
@@ -484,9 +510,11 @@
 				36A0AE3E2D66614E00ED7A15 /* SplashViewRouter.swift in Sources */,
 				0DF1D1452D22DD06001626E7 /* BitcoinRateService.swift in Sources */,
 				36A0AE512D66767600ED7A15 /* BaseViewController.swift in Sources */,
+				36D7DA6B2D67C2FF007E4242 /* CoreDataServiceImpl.swift in Sources */,
 				36A0AE632D6715B400ED7A15 /* TransactionTableViewCell.swift in Sources */,
 				36A0AE6A2D671F3100ED7A15 /* HomeViewDataSource.swift in Sources */,
 				36A0AE062D665E7F00ED7A15 /* AppRouter.swift in Sources */,
+				36D7DA6F2D67D0B4007E4242 /* BitcoinRateResponse.swift in Sources */,
 				36A0AE0B2D665EF200ED7A15 /* BaseModule.swift in Sources */,
 				36A0AE5C2D667AC400ED7A15 /* HomeViewModule.swift in Sources */,
 				1CA3B6562D22B0F500176711 /* AppDelegate.swift in Sources */,

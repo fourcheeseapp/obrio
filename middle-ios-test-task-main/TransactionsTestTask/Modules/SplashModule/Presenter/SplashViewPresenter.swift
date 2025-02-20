@@ -15,7 +15,7 @@ final class SplashViewPresenter {
     private weak var view: SplashView?
     private let router: SplashViewRouter
     
-    // MARK: - init 
+    // MARK: - init
     init(
         view: SplashView,
         router: SplashViewRouter

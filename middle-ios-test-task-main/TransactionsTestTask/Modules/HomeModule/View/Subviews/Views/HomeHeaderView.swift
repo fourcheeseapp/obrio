@@ -10,7 +10,7 @@ import SnapKit
 
 struct HomeHeaderViewModel {
     let coinName: String
-    let balance: String
+    let balance: Double
     let priceTitle: String
     let currentPrice: String
     let transactionTitle: String
@@ -23,28 +23,28 @@ protocol HomeHeaderViewDelegate: AnyObject {
 
 final class HomeHeaderView: UIView {
     private let coinNameLabel: UILabel = {
-        let view = UILabel()
-        view.font = .systemFont(ofSize: 16, weight: .regular)
-        view.textColor = .gray
-        return view
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .gray
+        return label
     }()
     private let balanceValueLabel: UILabel = {
-        let view = UILabel()
-        view.font = .systemFont(ofSize: 20, weight: .medium)
-        view.textColor = .white
-        return view
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.textColor = .white
+        return label
     }()
     private let priceTitleLabel: UILabel = {
-        let view = UILabel()
-        view.font = .systemFont(ofSize: 16, weight: .regular)
-        view.textColor = .gray
-        return view
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .gray
+        return label
     }()
     private let priceValueLabel: UILabel = {
-        let view = UILabel()
-        view.font = .systemFont(ofSize: 20, weight: .medium)
-        view.textColor = .white
-        return view
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.textColor = .white
+        return label
     }()
     private let logoImageView: UIImageView = {
         let view = UIImageView(image: Assets.splashLogo)
@@ -59,7 +59,11 @@ final class HomeHeaderView: UIView {
             for: .normal
         )
         button.backgroundColor = .clear
-        button.addTarget(self, action: #selector(didTapAddButton), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(didTapAddButton),
+            for: .touchUpInside
+        )
         return button
     }()
     private lazy var transactionButton: UIButton = {
@@ -100,10 +104,18 @@ final class HomeHeaderView: UIView {
     
     func configure(with model: HomeHeaderViewModel) {
         coinNameLabel.text = model.coinName
-        balanceValueLabel.text = model.balance
+        balanceValueLabel.text = String(model.balance)
         priceTitleLabel.text = model.priceTitle
         priceValueLabel.text = model.currentPrice
         transactionButton.setTitle(model.transactionTitle, for: .normal)
+    }
+    
+    func updateBalance(_ balance: Double) {
+        balanceValueLabel.text = String(balance)
+    }
+    
+    func updatePrice(_ price: String) {
+        priceValueLabel.text = price
     }
 }
 

@@ -15,4 +15,13 @@ extension UIView {
         UIGraphicsEndImageContext()
         return result
     }
+    
+    func roundTop(_ radius: CGFloat) {
+        layer.maskedCorners = [
+            .layerMinXMinYCorner,
+            .layerMaxXMinYCorner
+        ]
+        layer.cornerRadius = radius
+        layer.masksToBounds = true
+    }
 }

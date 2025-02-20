@@ -6,21 +6,38 @@
 //
 
 import Foundation
+import Combine
 
 protocol HomeViewPresenterProtocol {
     func onViewDidLoad()
     func onTapTransactions()
     func onTapAdd()
+    func didRefillWallet(with value: Double)
 }
 
 final class HomeViewPresenter {
     private weak var view: HomeView?
     private let router: HomeViewRouter
     private var sections: [HomeViewModel.Section] = []
+    private let rateService = ServicesAssembler.bitcoinRateService()
+    private let coreDataService = ServicesAssembler.coreDataService()
+    private var currentBalance: Double {
+        get {
+            coreDataService.getValueFromNumericField(forKey: .balance)
+        }
+    }
+    private var currentPrice: Double {
+        get {
+            coreDataService.getValueFromNumericField(forKey: .currentPrice)
+        }
+    }
+    private var cancellables = Set<AnyCancellable>()
     
+    // MARK: - init
     init(
         view: HomeView,
-        router: HomeViewRouter
+        router: HomeViewRouter,
+        coreDataService: CoreDataService
     ) {
         self.view = view
         self.router = router
@@ -29,22 +46,46 @@ final class HomeViewPresenter {
 
 // MARK: - HomePresenterProtocol
 extension HomeViewPresenter: HomeViewPresenterProtocol {
+    func didRefillWallet(with value: Double) {
+        let updatedBalance = currentBalance + value
+        coreDataService.updateNumericField(with: updatedBalance, forKey: .balance)
+        view?.updateBalance(updatedBalance)
+    }
+    
     func onTapTransactions() {
         // TODO: -
     }
     
     func onTapAdd() {
-        // TODO: -
+        view?.showInputView()
     }
     
     func onViewDidLoad() {
         configureHeader()
         prepareSections()
+        startMonitoringPrice()
     }
 }
 
 // MARK: - Privates
 private extension HomeViewPresenter {
+    func startMonitoringPrice() {
+        rateService.startMonitoringPrice()
+        rateService.ratePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let rate):
+                    self.view?.updatePrice(Constants.dollarSign + String(format: "%.3f", rate))
+                case .failure(let error):
+                    self.view?.updatePrice(Constants.dollarSign + String(format: "%.3f", currentPrice))
+                    self.view?.showError(with: error.localizedDescription)
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
     func prepareSections() {
         sections.append(HomeViewModel.Section(
             type: .transactions(UUID().uuidString),
@@ -100,9 +141,9 @@ private extension HomeViewPresenter {
     func configureHeader() {
         let headerViewModel = HomeHeaderViewModel(
             coinName: Constants.coinName,
-            balance: "73.945",
+            balance: currentBalance,
             priceTitle: Constants.priceTitle,
-            currentPrice: Constants.dollarSign + "129,00",
+            currentPrice: Constants.dollarSign + Constants.emptyState,
             transactionTitle: Constants.transactionTitle
         )
         view?.configureHeader(with: headerViewModel)
@@ -110,6 +151,7 @@ private extension HomeViewPresenter {
     
     // MARK: - Constants
     enum Constants {
+        static let emptyState: String = "-"
         static let dollarSign: String = "$"
         static let btcSign: String = "btc"
         static let transactionTitle: String = "Add transaction"

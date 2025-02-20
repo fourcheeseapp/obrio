@@ -11,15 +11,20 @@ import SnapKit
 protocol HomeView: AnyObject {
     func configureHeader(with model: HomeHeaderViewModel)
     func reloadData(with sections: [HomeViewModel.Section])
+    func showInputView()
+    func updateBalance(_ balance: Double)
+    func updatePrice(_ price: String)
+    func showError(with message: String)
 }
 
 final class HomeViewController: BaseViewController {
     typealias Snapshot = NSDiffableDataSourceSnapshot<HomeViewModel.SectionType, HomeViewModel.SectionItem>
     private lazy var headerView: HomeHeaderView = {
-       let view = HomeHeaderView()
+        let view = HomeHeaderView()
         view.delegate = self
         return view
     }()
+    private var inputSlidingView: InputSlidingView?
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
@@ -50,6 +55,29 @@ final class HomeViewController: BaseViewController {
 
 // MARK: - HomeView
 extension HomeViewController: HomeView {
+    func showError(with message: String) {
+        let alert = UIAlertController(title: message, message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func updatePrice(_ price: String) {
+        headerView.updatePrice(price)
+    }
+    
+    func updateBalance(_ balance: Double) {
+        headerView.updateBalance(balance)
+    }
+    
+    func showInputView() {
+        inputSlidingView = InputSlidingView()
+        inputSlidingView?.delegate = self
+        view.addSubview(inputSlidingView ?? UIView())
+        inputSlidingView?.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+    
     func reloadData(with sections: [HomeViewModel.Section]) {
         var snapshot = Snapshot()
         sections.forEach { section in
@@ -64,12 +92,24 @@ extension HomeViewController: HomeView {
     }
 }
 
+// MARK: - InputSlidingViewDelegate
+extension HomeViewController: InputSlidingViewDelegate {
+    func onDissmiss() {
+        inputSlidingView?.removeFromSuperview()
+        inputSlidingView = nil 
+    }
+    
+    func didAdd(_ amount: Double) {
+        presenter?.didRefillWallet(with: amount)
+    }
+}
+
 // MARK: - HomeHeaderViewDelegate
 extension HomeViewController: HomeHeaderViewDelegate {
     func didTapTransactions() {
         presenter?.onTapTransactions()
     }
-   
+    
     func didTapAdd() {
         presenter?.onTapAdd()
     }
