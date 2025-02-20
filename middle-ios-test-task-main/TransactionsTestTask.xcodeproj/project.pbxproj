@@ -37,6 +37,9 @@
 		36A0AE5A2D667A7A00ED7A15 /* HomeViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0AE592D667A7A00ED7A15 /* HomeViewRouter.swift */; };
 		36A0AE5C2D667AC400ED7A15 /* HomeViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0AE5B2D667AC400ED7A15 /* HomeViewModule.swift */; };
 		36A0AE612D667DB100ED7A15 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0AE602D667DB100ED7A15 /* HomeHeaderView.swift */; };
+		36A0AE632D6715B400ED7A15 /* TransactionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0AE622D6715B400ED7A15 /* TransactionTableViewCell.swift */; };
+		36A0AE682D671BBF00ED7A15 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0AE672D671BBF00ED7A15 /* HomeViewModel.swift */; };
+		36A0AE6A2D671F3100ED7A15 /* HomeViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36A0AE692D671F3100ED7A15 /* HomeViewDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +93,9 @@
 		36A0AE592D667A7A00ED7A15 /* HomeViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewRouter.swift; sourceTree = "<group>"; };
 		36A0AE5B2D667AC400ED7A15 /* HomeViewModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModule.swift; sourceTree = "<group>"; };
 		36A0AE602D667DB100ED7A15 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
+		36A0AE622D6715B400ED7A15 /* TransactionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTableViewCell.swift; sourceTree = "<group>"; };
+		36A0AE672D671BBF00ED7A15 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		36A0AE692D671F3100ED7A15 /* HomeViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,6 +276,7 @@
 			children = (
 				36A0AE5B2D667AC400ED7A15 /* HomeViewModule.swift */,
 				36A0AE592D667A7A00ED7A15 /* HomeViewRouter.swift */,
+				36A0AE662D671BAA00ED7A15 /* Model */,
 				36A0AE5D2D667B1000ED7A15 /* View */,
 				36A0AE5E2D667B1A00ED7A15 /* Presenter */,
 			);
@@ -281,6 +288,7 @@
 			children = (
 				36A0AE5F2D667DA200ED7A15 /* Subviews */,
 				36A0AE532D6678A200ED7A15 /* HomeViewController.swift */,
+				36A0AE692D671F3100ED7A15 /* HomeViewDataSource.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -296,9 +304,34 @@
 		36A0AE5F2D667DA200ED7A15 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				36A0AE602D667DB100ED7A15 /* HomeHeaderView.swift */,
+				36A0AE652D67171900ED7A15 /* Cell */,
+				36A0AE642D67170F00ED7A15 /* Views */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		36A0AE642D67170F00ED7A15 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				36A0AE602D667DB100ED7A15 /* HomeHeaderView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		36A0AE652D67171900ED7A15 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				36A0AE622D6715B400ED7A15 /* TransactionTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		36A0AE662D671BAA00ED7A15 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				36A0AE672D671BBF00ED7A15 /* HomeViewModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -435,6 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36A0AE432D66624C00ED7A15 /* UIApplication+Ext.swift in Sources */,
+				36A0AE682D671BBF00ED7A15 /* HomeViewModel.swift in Sources */,
 				36A0AE4D2D66697C00ED7A15 /* Colors.swift in Sources */,
 				36A0AE612D667DB100ED7A15 /* HomeHeaderView.swift in Sources */,
 				36A0AE562D6678FF00ED7A15 /* HomeViewPresenter.swift in Sources */,
@@ -450,6 +484,8 @@
 				36A0AE3E2D66614E00ED7A15 /* SplashViewRouter.swift in Sources */,
 				0DF1D1452D22DD06001626E7 /* BitcoinRateService.swift in Sources */,
 				36A0AE512D66767600ED7A15 /* BaseViewController.swift in Sources */,
+				36A0AE632D6715B400ED7A15 /* TransactionTableViewCell.swift in Sources */,
+				36A0AE6A2D671F3100ED7A15 /* HomeViewDataSource.swift in Sources */,
 				36A0AE062D665E7F00ED7A15 /* AppRouter.swift in Sources */,
 				36A0AE0B2D665EF200ED7A15 /* BaseModule.swift in Sources */,
 				36A0AE5C2D667AC400ED7A15 /* HomeViewModule.swift in Sources */,

@@ -8,6 +8,19 @@
 import UIKit
 import SnapKit
 
+struct HomeHeaderViewModel {
+    let coinName: String
+    let balance: String
+    let priceTitle: String
+    let currentPrice: String
+    let transactionTitle: String
+}
+
+protocol HomeHeaderViewDelegate: AnyObject {
+    func didTapTransactions()
+    func didTapAdd()
+}
+
 final class HomeHeaderView: UIView {
     private let coinNameLabel: UILabel = {
         let view = UILabel()
@@ -49,7 +62,7 @@ final class HomeHeaderView: UIView {
         button.addTarget(self, action: #selector(didTapAddButton), for: .touchUpInside)
         return button
     }()
-    private lazy var transferButton: UIButton = {
+    private lazy var transactionButton: UIButton = {
         let button = UIButton()
         button.setImage(
             Assets.transferButton,
@@ -58,7 +71,12 @@ final class HomeHeaderView: UIView {
         button.backgroundColor = Colors.purpleLight
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.addTarget(self, action: #selector(didTapTransferButton), for: .touchUpInside)
+        button.setTitleColor(
+            Colors.mainBackground,
+            for: .normal
+        )
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        button.addTarget(self, action: #selector(didTapTransactionButton), for: .touchUpInside)
         return button
     }()
     private let deviderView: UIView = {
@@ -66,22 +84,26 @@ final class HomeHeaderView: UIView {
         view.backgroundColor = Colors.purpleLight?.withAlphaComponent(0.3)
         return view
     }()
+    
+    weak var delegate: HomeHeaderViewDelegate?
+    
+    // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
         setupConstraints()
-        configure()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure() {
-        coinNameLabel.text = "Bitcoin/BTC"
-        balanceValueLabel.text = "73.945"
-        priceTitleLabel.text = "BTC/USDT"
-        priceValueLabel.text = "$129,00"
+    func configure(with model: HomeHeaderViewModel) {
+        coinNameLabel.text = model.coinName
+        balanceValueLabel.text = model.balance
+        priceTitleLabel.text = model.priceTitle
+        priceValueLabel.text = model.currentPrice
+        transactionButton.setTitle(model.transactionTitle, for: .normal)
     }
 }
 
@@ -90,12 +112,12 @@ private extension HomeHeaderView {
     // MARK: - Actions
     @objc
     func didTapAddButton() {
-        
+        delegate?.didTapAdd()
     }
     
     @objc
-    func didTapTransferButton() {
-        
+    func didTapTransactionButton() {
+        delegate?.didTapTransactions()
     }
     
     // MARK: - Methods
@@ -107,7 +129,7 @@ private extension HomeHeaderView {
         addSubview(priceTitleLabel)
         addSubview(priceValueLabel)
         addSubview(addButton)
-        addSubview(transferButton)
+        addSubview(transactionButton)
         addSubview(deviderView)
     }
     
@@ -139,10 +161,10 @@ private extension HomeHeaderView {
             $0.top.equalTo(priceValueLabel.snp.bottom).inset(-16)
             $0.bottom.equalTo(deviderView.snp.top).inset(-4)
         }
-        transferButton.snp.makeConstraints {
+        transactionButton.snp.makeConstraints {
             $0.height.equalTo(32)
             $0.leading.equalToSuperview().inset(16)
-            $0.trailing.equalTo(coinNameLabel.snp.trailing)
+            $0.width.equalToSuperview().multipliedBy(0.45)
             $0.centerY.equalTo(addButton)
         }
         deviderView.snp.makeConstraints {
