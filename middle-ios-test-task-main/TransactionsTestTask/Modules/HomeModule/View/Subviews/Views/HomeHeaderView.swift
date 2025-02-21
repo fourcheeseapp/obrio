@@ -158,6 +158,7 @@ private extension HomeHeaderView {
         balanceValueLabel.snp.makeConstraints {
             $0.leading.equalTo(logoImageView.snp.trailing).inset(-8)
             $0.bottom.equalTo(logoImageView.snp.bottom)
+            $0.width.lessThanOrEqualToSuperview().dividedBy(2)
         }
         priceTitleLabel.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(16)

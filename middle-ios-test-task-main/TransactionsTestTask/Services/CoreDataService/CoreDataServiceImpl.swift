@@ -11,6 +11,8 @@ import CoreData
 protocol CoreDataService: AnyObject {
     func updateNumericField(with value: Double, forKey key: Key)
     func getValueFromNumericField(forKey key: Key) -> Double
+    func saveTransaction(transaction: TransactionModel)
+    func fetchTransactions() -> [TransactionModel]
 }
 
 final class CoreDataServiceImpl {
@@ -30,15 +32,46 @@ final class CoreDataServiceImpl {
 }
 
 extension CoreDataServiceImpl: CoreDataService {
+    func saveTransaction(transaction: TransactionModel) {
+        let newTransaction = Transaction(context: context)
+        newTransaction.date = transaction.date
+        newTransaction.amount = transaction.amount
+        newTransaction.category = transaction.category.rawValue
+        
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save transaction: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchTransactions() -> [TransactionModel] {
+        let fetchRequest: NSFetchRequest<Transaction> = Transaction.fetchRequest()
+        
+        do {
+            let results = try context.fetch(fetchRequest)
+            return results.map { transaction in
+                TransactionModel(
+                    date: transaction.date ?? Date(),
+                    amount: transaction.amount,
+                    category: TransactionModel.TransactionCategory(rawValue: transaction.category ?? "") ?? .other
+                )
+            }
+        } catch {
+            print("Failed to fetch transactions: \(error.localizedDescription)")
+            return []
+        }
+    }
+    
     func updateNumericField(with value: Double, forKey key: Key) {
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: Constants.emtityName)
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: Constants.waletEntityName)
         
         do {
             let results = try context.fetch(fetchRequest)
             if let existingData = results.first {
                 existingData.setValue(value, forKey: key.rawValue)
             } else {
-                if let entity = NSEntityDescription.entity(forEntityName: Constants.emtityName, in: context) {
+                if let entity = NSEntityDescription.entity(forEntityName: Constants.waletEntityName, in: context) {
                     let newData = NSManagedObject(entity: entity, insertInto: context)
                     newData.setValue(value, forKey: key.rawValue)
                 }
@@ -50,7 +83,7 @@ extension CoreDataServiceImpl: CoreDataService {
     }
     
     func getValueFromNumericField(forKey key: Key) -> Double {
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: Constants.emtityName)
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: Constants.waletEntityName)
         do {
             if let result = try context.fetch(fetchRequest).first {
                 if let balance = result.value(forKey: key.rawValue) as? Double {
@@ -74,6 +107,6 @@ enum Key: String {
 private extension CoreDataServiceImpl {
     enum Constants {
         static let containerName = "TransactionsTestTask"
-        static let emtityName = "WaletData"
+        static let waletEntityName = "WaletData"
     }
 }

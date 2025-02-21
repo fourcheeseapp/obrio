@@ -26,7 +26,7 @@ enum HomeViewModel {
 
 struct TransactionModel: Hashable {
     let id = UUID().uuidString
-    let time: String
+    let date: Date
     let amount: Double
     let category: TransactionCategory
     

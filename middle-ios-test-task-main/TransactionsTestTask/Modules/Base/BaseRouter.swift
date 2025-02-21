@@ -31,8 +31,7 @@ class BaseRouter: RouterProtocol {
     
     func openModule(
         _ module: any BaseModule,
-        needPinCode: Bool,
-        animated: Bool
+        animated: Bool = true 
     ) {
         onMainQueue { [weak self] in
             guard let self else { return }
@@ -43,24 +42,7 @@ class BaseRouter: RouterProtocol {
             )
         }
     }
-    
-    func replaceRootModule(
-        with module: BaseModule?,
-        animated: Bool = true,
-        completion: Callback? = nil
-    ) {
-        guard let module else { return }
-        onMainQueue {
-            guard let window = UIApplication.activeWindow else { return }
-            window.replaceRootViewControllerWith(
-                module.viewController(),
-                animated: true,
-                completion: completion
-            )
-        }
-    }
-    
-    
+   
     func close(
         animated: Bool,
         completion: Callback?

@@ -9,7 +9,6 @@ import UIKit
 
 protocol RouterProtocol: AnyObject {
     var viewController: UIViewController? { get }
-    func openModule(_ module: BaseModule, needPinCode: Bool, animated: Bool)
-    func replaceRootModule(with module: BaseModule?, animated: Bool, completion: Callback?)
+    func openModule(_ module: BaseModule, animated: Bool)
     func close(animated: Bool, completion: Callback?)
 }

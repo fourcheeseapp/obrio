@@ -7,6 +7,11 @@
 
 import UIKit
 
+struct InputSlidingViewModel {
+    let title: String
+    let enterAmount: String
+}
+
 protocol InputSlidingViewDelegate: AnyObject {
     func onDissmiss()
     func didAdd(_ amount: Double)
@@ -83,8 +88,6 @@ final class InputSlidingView: UIView {
         setupConstraints()
         setupGestureRecognizers()
         setupNotifications()
-#warning("!!!")
-        configure()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -100,10 +103,10 @@ final class InputSlidingView: UIView {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func configure() {
-        titleLabel.text = "Recieve Coins"
-        addButton.setTitle("Recieve coins", for: .normal)
-        textField.placeholder = "Enter amount of btc"
+    func configure(with model: InputSlidingViewModel) {
+        titleLabel.text = model.title
+        addButton.setTitle(model.title, for: .normal)
+        textField.placeholder = model.enterAmount
     }
 }
 
@@ -156,6 +159,7 @@ private extension InputSlidingView {
             }
             self.layoutSubviews()
         }
+        delegate?.onDissmiss()
     }
     
     func showSlidingView() {

@@ -17,7 +17,9 @@ final class AppRouter: BaseRouter {
  
     func start() {
         let module = SplashViewModule()
-        window.rootViewController = module.viewController()
+        let navigationController = UINavigationController(rootViewController: module.viewController())
+        navigationController.setNavigationBarHidden(true, animated: false)
+        window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
 }

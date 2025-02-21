@@ -30,7 +30,7 @@ extension SplashViewPresenter: SplashViewPresenterProtocol {
     func onViewDidLoad() {
         view?.setupTitle(Consants.title)
         onMainQueue(after: .now() + 4) { [weak self] in
-            self?.router.replaceRootModule(with: HomeModule())
+            self?.router.openModule(HomeModule())
         }
     }
 }

@@ -15,8 +15,7 @@ final class HomeModule {
         let router = HomeViewRouter(viewController: view)
         let presenter = HomeViewPresenter(
             view: view,
-            router: router,
-            coreDataService: CoreDataServiceImpl()
+            router: router
         )
         view.presenter = presenter
     }

@@ -11,10 +11,11 @@ import SnapKit
 protocol HomeView: AnyObject {
     func configureHeader(with model: HomeHeaderViewModel)
     func reloadData(with sections: [HomeViewModel.Section])
-    func showInputView()
+    func showInputView(with model: InputSlidingViewModel)
     func updateBalance(_ balance: Double)
     func updatePrice(_ price: String)
     func showError(with message: String)
+    func comfigureEmptyState(with title: String)
 }
 
 final class HomeViewController: BaseViewController {
@@ -27,10 +28,9 @@ final class HomeViewController: BaseViewController {
     private var inputSlidingView: InputSlidingView?
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = Colors.mainBackground
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
-        tableView.delegate = self
         let inset: CGFloat = 16
         tableView.contentInset = UIEdgeInsets(
             top: inset,
@@ -42,7 +42,13 @@ final class HomeViewController: BaseViewController {
         return tableView
     }()
     private var dataSource: TeacherCreateHomeworkViewDataSource!
-    
+    private let eptyStateLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .gray
+        label.textAlignment = .center
+        return label
+    }()
     var presenter: HomeViewPresenterProtocol?
     
     override func viewDidLoad() {
@@ -51,10 +57,35 @@ final class HomeViewController: BaseViewController {
         setupConstraints()
         presenter?.onViewDidLoad()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.onViewWillAppear()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        presenter?.onViewDidDissapear()
+    }
 }
 
 // MARK: - HomeView
 extension HomeViewController: HomeView {
+    func comfigureEmptyState(with title: String) {
+        eptyStateLabel.isHidden = false
+        eptyStateLabel.text = title
+    }
+    
+    func showInputView(with model: InputSlidingViewModel) {
+        inputSlidingView = InputSlidingView()
+        inputSlidingView?.delegate = self
+        view.addSubview(inputSlidingView ?? UIView())
+        inputSlidingView?.configure(with: model)
+        inputSlidingView?.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+    
     func showError(with message: String) {
         let alert = UIAlertController(title: message, message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -69,16 +100,8 @@ extension HomeViewController: HomeView {
         headerView.updateBalance(balance)
     }
     
-    func showInputView() {
-        inputSlidingView = InputSlidingView()
-        inputSlidingView?.delegate = self
-        view.addSubview(inputSlidingView ?? UIView())
-        inputSlidingView?.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-    }
-    
     func reloadData(with sections: [HomeViewModel.Section]) {
+        eptyStateLabel.isHidden = true 
         var snapshot = Snapshot()
         sections.forEach { section in
             snapshot.appendSections([section.type])
@@ -115,16 +138,12 @@ extension HomeViewController: HomeHeaderViewDelegate {
     }
 }
 
-// MARK: - UITableViewDelegate
-extension HomeViewController: UITableViewDelegate {
-    
-}
-
 // MARK: - Privates
 private extension HomeViewController {
     func setupUI() {
         view.addSubview(headerView)
         view.addSubview(tableView)
+        view.addSubview(eptyStateLabel)
         dataSource = TeacherCreateHomeworkViewDataSource(tableView: tableView)
     }
     
@@ -137,6 +156,10 @@ private extension HomeViewController {
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.top.equalTo(headerView.snp.bottom)
             $0.bottom.equalToSuperview()
+        }
+        eptyStateLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.centerY.equalToSuperview()
         }
     }
 }

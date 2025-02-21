@@ -53,7 +53,7 @@ final class TransactionTableViewCell: UITableViewCell {
     }
     
     func configure(with model: TransactionModel) {
-        timeLabel.text = model.time
+        timeLabel.text = model.date.getTime()
         categoryLogo.text = model.category.logo
         categoryLabel.text = model.category.rawValue.capitalized
         let isRefill = model.category == .refill
