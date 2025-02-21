@@ -9,12 +9,10 @@ import Foundation
 
 enum HomeViewModel {
     enum SectionType: Hashable {
-       case date(String)
        case transactions(String)
     }
     
     enum SectionItem: Hashable {
-        case date(String)
         case transaction(TransactionModel)
     }
     

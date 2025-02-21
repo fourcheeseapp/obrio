@@ -22,8 +22,13 @@ final class BitcoinRateServiceImpl {
     private let coreDataService = ServicesAssembler.coreDataService()
     private var rateSubject = PassthroughSubject<Result<Double, BaseError>, Never>()
     private var cancellables = Set<AnyCancellable>()
+    private let fetchInterval: TimeInterval
     var ratePublisher: AnyPublisher<Result<Double, BaseError>, Never> {
         return rateSubject.eraseToAnyPublisher()
+    }
+    
+    init(fetchInterval: TimeInterval = Constants.fetchInterval) {
+        self.fetchInterval = fetchInterval
     }
 }
 
@@ -35,7 +40,7 @@ extension BitcoinRateServiceImpl: BitcoinRateService {
     
     func startMonitoringPrice() {
         fetchBitcoinRate()
-        Timer.publish(every: 120, on: .main, in: .common)
+        Timer.publish(every: fetchInterval, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 self?.fetchBitcoinRate()
@@ -93,5 +98,6 @@ private extension BitcoinRateServiceImpl {
         static let invalidURLMessage: String = "Invalid URL"
         static let noDataMessage: String = "No data received"
         static let decodingErrorMessage: String = "Decoding error"
+        static let fetchInterval: TimeInterval = 120
     }
 }

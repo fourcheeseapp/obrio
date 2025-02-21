@@ -26,7 +26,8 @@ final class CoreDataServiceImpl {
         return container
     }()
     
-    private var context: NSManagedObjectContext {
+    // for test case make internal
+    /*private*/ var context: NSManagedObjectContext {
         return persistentContainer.viewContext
     }
 }

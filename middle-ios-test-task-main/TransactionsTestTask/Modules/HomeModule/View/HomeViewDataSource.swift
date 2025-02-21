@@ -11,9 +11,6 @@ final class TeacherCreateHomeworkViewDataSource: UITableViewDiffableDataSource<H
     init(tableView: UITableView) {
         super.init(tableView: tableView) { tableView, indexPath, item in
             switch item {
-            case .date(let model):
-                // TODO: - 
-                return UITableViewCell()
             case .transaction(let model):
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "TransactionTableViewCell", for: indexPath) as? TransactionTableViewCell else { return UITableViewCell() }
                 cell.configure(with: model)

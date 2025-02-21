@@ -108,57 +108,20 @@ private extension HomeViewPresenter {
     func prepareSections() {
         sections = []
         let transactions = coreDataService.fetchTransactions().sorted(by: { $0.date > $1.date })
-        let groupedTransactions = groupTransactionsByDate(transactions)
-        
-        groupedTransactions.forEach { (dateCategory, transactionsForCategory) in
-            var items = [HomeViewModel.SectionItem]()
-            transactionsForCategory.forEach { transaction in
-                items.append(HomeViewModel.SectionItem.transaction(transaction))
-            }
-            sections.append(HomeViewModel.Section(
-                type: .transactions(dateCategory),
-                items: items
-            ))
+        var items = [HomeViewModel.SectionItem]()
+        transactions.forEach { transaction in
+            items.append(HomeViewModel.SectionItem.transaction(transaction))
         }
-        
+        sections.append(HomeViewModel.Section(
+            type: .transactions(UUID().uuidString),
+            items: items
+        ))
         if transactions.isEmpty {
             view?.comfigureEmptyState(with: Constants.emptyStateTitle)
             return
         }
         
         view?.reloadData(with: sections)
-    }
-    
-    func groupTransactionsByDate(_ transactions: [TransactionModel]) -> [String: [TransactionModel]] {
-        var grouped: [String: [TransactionModel]] = [:]
-        
-        transactions.forEach { transaction in
-            let dateCategory = getDateCategory(for: transaction.date)
-            if grouped[dateCategory] == nil {
-                grouped[dateCategory] = []
-            }
-            grouped[dateCategory]?.append(transaction)
-        }
-        
-        return grouped
-    }
-    
-    func getDateCategory(for date: Date) -> String {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let transactionDate = calendar.startOfDay(for: date)
-        
-        if calendar.isDate(today, inSameDayAs: transactionDate) {
-            return "Today"
-        } else if calendar.isDateInYesterday(transactionDate) {
-            return "Yesterday"
-        } else {
-            let components = calendar.dateComponents([.day], from: transactionDate, to: today)
-            if let daysAgo = components.day {
-                return "\(daysAgo) days ago"
-            }
-            return "Older"
-        }
     }
     
     func configureHeader() {

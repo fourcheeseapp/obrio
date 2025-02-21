@@ -4,12 +4,14 @@
 //
 //
 
+import Foundation
+
 /// Services Assembler is used for Dependency Injection
 enum ServicesAssembler {
     
     // MARK: - BitcoinRateService
     static let bitcoinRateService: PerformOnce<BitcoinRateService> = {
-        let service = BitcoinRateServiceImpl()
+        let service = BitcoinRateServiceImpl(fetchInterval: Constants.fetchInterval)
         return { service }
     }()
     
@@ -19,4 +21,11 @@ enum ServicesAssembler {
         return { service }
     }()
     
+}
+
+// MARK: - Private
+private extension ServicesAssembler {
+    enum Constants {
+        static let fetchInterval: TimeInterval = 60
+    }
 }
